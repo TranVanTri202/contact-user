@@ -33,7 +33,7 @@ function TableData() {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete?")) {
+    if (window.confirm("Are you sure you want to delete?")) { 
       dispatch(deleteContact(id));
     }
   };
@@ -55,7 +55,7 @@ function TableData() {
       .toLowerCase()
       .includes(valueSearch.toLowerCase());
     const isPhoneMatch = contact.phoneNumber.includes(valueSearch);
-    
+
     return valueSearch === "" || isNameMatch || isEmailMatch || isPhoneMatch;
   });
 
@@ -80,29 +80,38 @@ function TableData() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filterContact.map((contact, index) => {
-              return (
-                <TableRow key={index}>
-                  <TableCell>{contact.name}</TableCell>
-                  <TableCell>{contact.email}</TableCell>
-                  <TableCell>{contact.phoneNumber}</TableCell>
-                  <TableCell>
-                    <Box>
-                      <Button onClick={() => handleEdit(contact.id)}>
-                        <EditIcon titleAccess="Edit" color="secondary" />
-                      </Button>
-                      <Button>
-                        <DeleteForeverIcon
-                          titleAccess="Delete"
-                          color="error"
-                          onClick={() => handleDelete(contact.id)}
-                        />
-                      </Button>{" "}
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {filterContact.length === 0 ? ( // Kiểm tra nếu không tìm thấy dữ liệu
+              <TableRow>
+                <TableCell colSpan={4} align="center">
+                  No data found
+                </TableCell>
+              </TableRow>
+            ) : (
+              // Hiển thị dữ liệu
+              filterContact.map((contact, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{contact.name}</TableCell>
+                    <TableCell>{contact.email}</TableCell>
+                    <TableCell>{contact.phoneNumber}</TableCell>
+                    <TableCell>
+                      <Box>
+                        <Button onClick={() => handleEdit(contact.id)}>
+                          <EditIcon titleAccess="Edit" color="secondary" />
+                        </Button>
+                        <Button>
+                          <DeleteForeverIcon
+                            titleAccess="Delete"
+                            color="error"
+                            onClick={() => handleDelete(contact.id)}
+                          />
+                        </Button>{" "}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            )}
           </TableBody>
         </Table>
       </Paper>
