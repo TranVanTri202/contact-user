@@ -1,14 +1,12 @@
 import {
   Box,
   Button,
-  Modal,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -19,40 +17,48 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteContact, fetchDataContact } from "../redux/ContactSlice";
 import ModalAdd from "./ModalAdd";
 
-function TableData({valueSearch}) {
-  const dispatch = useDispatch()
-  const contacts = useSelector((state) => state.contact.contacts)
- 
-  useEffect(() =>{
-      dispatch(fetchDataContact())
-  }, [dispatch])
+function TableData() {
+
+  const dispatch = useDispatch();
+  const contacts = useSelector((state) => state.contact.contacts);
+  const valueSearch = useSelector((state) => state.contact.searchValue);
+
+  useEffect(() => {
+    dispatch(fetchDataContact());
+  }, [dispatch]);
 
   const navigate = useNavigate();
   const handleEdit = (id) => {
     navigate(`/editContact/${id}`);
   };
 
-  const handleDelete = (id) =>{
-    if(window.confirm('Are you sure you want to delete?')){
-      dispatch(deleteContact(id))
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete?")) {
+      dispatch(deleteContact(id));
     }
-  }
-  const [isModelOpen, setIsModelOpen] = useState(false)
+  };
 
-  const handleOpenModal = () =>{
-    setIsModelOpen(true)
-  }
-  const handleCloseModal = () =>{
-    setIsModelOpen(false)
-  }
- 
+  const [isModelOpen, setIsModelOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModelOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModelOpen(false);
+  };
+
   const filterContact = contacts.filter((contact) => {
-    const isNameMatch = contact.name.toLowerCase().includes(valueSearch.toLowerCase());
-    const isEmailMatch = contact.email.toLowerCase().includes(valueSearch.toLowerCase());
-    const isPhoneMatch = contact.phoneNumber.includes(valueSearch)
+    const isNameMatch = contact.name
+      .toLowerCase()
+      .includes(valueSearch.toLowerCase());
+    const isEmailMatch = contact.email
+      .toLowerCase()
+      .includes(valueSearch.toLowerCase());
+    const isPhoneMatch = contact.phoneNumber.includes(valueSearch);
+    
     return valueSearch === "" || isNameMatch || isEmailMatch || isPhoneMatch;
   });
-  
+
   return (
     <Box sx={{ width: "80%", margin: "auto", mt: "30px" }}>
       <Button
@@ -83,10 +89,14 @@ function TableData({valueSearch}) {
                   <TableCell>
                     <Box>
                       <Button onClick={() => handleEdit(contact.id)}>
-                        <EditIcon color="secondary" />
+                        <EditIcon titleAccess="Edit" color="secondary" />
                       </Button>
                       <Button>
-                        <DeleteForeverIcon color="error" onClick={() => handleDelete(contact.id)}/>
+                        <DeleteForeverIcon
+                          titleAccess="Delete"
+                          color="error"
+                          onClick={() => handleDelete(contact.id)}
+                        />
                       </Button>{" "}
                     </Box>
                   </TableCell>
@@ -96,7 +106,7 @@ function TableData({valueSearch}) {
           </TableBody>
         </Table>
       </Paper>
-      <ModalAdd isModelOpen={isModelOpen} handleCloseModal={handleCloseModal}/>
+      <ModalAdd isModelOpen={isModelOpen} handleCloseModal={handleCloseModal} />
     </Box>
   );
 }

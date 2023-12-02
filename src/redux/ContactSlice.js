@@ -1,16 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiFirebase from "../firebase/firebaseConfig";
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 
-export const fetchDataContact = createAsyncThunk("contactUser/fetchDataContact", async () => {
-  const quetSnaapDoc = await getDocs(collection(apiFirebase, "contactUser"));
-    return quetSnaapDoc.docs.map(
-      (item) => ({ id: item.id, ...item.data() } )
-    );
-});
+export const fetchDataContact = createAsyncThunk(
+  "contactUser/fetchDataContact",
+  async () => {
+    const quetSnaapDoc = await getDocs(collection(apiFirebase, "contactUser"));
+    return quetSnaapDoc.docs.map((item) => ({ id: item.id, ...item.data() }));
+  }
+);
 
 const initialState = {
   contacts: [],
+  searchValue: "",
 };
 
 export const addContact = createAsyncThunk(
@@ -46,27 +55,32 @@ const contactSlice = createSlice({
   name: "contact",
   initialState,
   reducers: {
-    
+    setSearchValue: (state, action) => {
+      state.searchValue = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
-    .addCase(addContact.fulfilled,(state, action) =>{
-      state.contacts = [...state.contacts, action.payload]
-    })
-    .addCase(fetchDataContact.fulfilled, (state, action) => {
-      state.contacts = action.payload; // Thêm dữ liệu vào state
-    })
-    .addCase(deleteContact.fulfilled, (state, action) =>{
-      state.contacts = state.contacts.filter((contact) => contact.id !== action.payload)
-    })
-    .addCase(updateContact.fulfilled, (state, action) => {
-      const index = state.contacts.findIndex(
-        (contact) => contact.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.contacts[index] = action.payload;
-      }
-    })
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.contacts = [...state.contacts, action.payload];
+      })
+      .addCase(fetchDataContact.fulfilled, (state, action) => {
+        state.contacts = action.payload; // Thêm dữ liệu vào state
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.contacts = state.contacts.filter(
+          (contact) => contact.id !== action.payload
+        );
+      })
+      .addCase(updateContact.fulfilled, (state, action) => {
+        const index = state.contacts.findIndex(
+          (contact) => contact.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.contacts[index] = action.payload;
+        }
+      });
   },
 });
+export const { setSearchValue } = contactSlice.actions;
 export default contactSlice.reducer;

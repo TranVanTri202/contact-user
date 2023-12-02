@@ -1,35 +1,43 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
 // Chủ đề sáng
 const lightTheme = createTheme({
   palette: {
-    mode: 'light', // Chỉ định chủ đề là chủ đề sáng
+    mode: "light",
     primary: {
-      main: '#2196f3', // Màu chính cho chủ đề sáng
+      main: "#2196f3",
     },
     secondary: {
-      main: '#f44336', // Màu phụ cho chủ đề sáng
+      main: "#f44336",
     },
-    // Các thiết lập màu sắc khác ở đây...
   },
- 
- 
 });
 
 // Chủ đề tối
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark', // Chỉ định chủ đề là chủ đề tối
-    primary: {
-      main: '#90caf9', // Màu chính cho chủ đề tối
-    },
+    mode: "dark",
     secondary: {
-      main: '#f48fb1', // Màu phụ cho chủ đề tối
+      main: "#f48fb1",
     },
-    // Các thiết lập màu sắc khác ở đây...
   },
-
-  // Các thiết lập khác cho chủ đề tối ở đây...
+  components: {
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          color: "#000", 
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#444", 
+          color: "#fff", 
+        },
+      },
+    },
+  },
 });
 
 export { lightTheme, darkTheme };
